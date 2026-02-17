@@ -8,22 +8,28 @@ const filePath = path.join(__dirname, "../data/slotState.json");
 async function checkSlotsWithPuppeteer() {
   console.log("🧿 Launching real browser session...");
 
-const browser = await puppeteer.launch({
-  executablePath: process.env.NODE_ENV === "production" 
-    ? undefined 
-    : "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
-  headless: process.env.NODE_ENV === "production" ? "new" : false,
-  args: [
-    "--no-sandbox",
-    "--disable-setuid-sandbox",
-    "--disable-dev-shm-usage",
-    "--disable-gpu",
-    "--disable-software-rasterizer",
-    "--disable-dev-tools",
-    ...(process.env.NODE_ENV === "production" ? [] : ["--start-maximized"])
-  ],
-  defaultViewport: process.env.NODE_ENV === "production" ? { width: 1920, height: 1080 } : null,
-});
+  const isProduction = !process.env.LOCALAPPDATA; // Windows has LOCALAPPDATA, Linux doesn't
+  
+  const launchOptions = {
+    headless: isProduction ? "new" : false,
+    args: [
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-dev-shm-usage",
+      "--disable-gpu",
+      "--disable-software-rasterizer",
+      "--disable-dev-tools",
+      ...(!isProduction ? ["--start-maximized"] : [])
+    ],
+    defaultViewport: isProduction ? { width: 1920, height: 1080 } : null,
+  };
+
+  // Only set executablePath for local Windows development
+  if (!isProduction) {
+    launchOptions.executablePath = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
+  }
+
+  const browser = await puppeteer.launch(launchOptions);
 
 
   try {
