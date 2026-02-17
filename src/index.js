@@ -11,6 +11,11 @@ const { registerToken } = require("./notify/notify");
 const app = express();
 app.use(express.json());
 
+// Health check endpoint for monitoring
+app.get("/health", (req, res) => {
+  res.json({ status: "ok", timestamp: new Date().toISOString() });
+});
+
 const PORT = process.env.PORT || 5000;
 const historyPath = path.join(__dirname, "./data/history.json");
 
