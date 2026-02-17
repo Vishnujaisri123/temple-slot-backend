@@ -9,13 +9,17 @@ async function checkSlotsWithPuppeteer() {
   console.log("🧿 Launching real browser session...");
 
 const browser = await puppeteer.launch({
-  executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
-  headless: process.env.NODE_ENV === "production" ? true : false,
+  executablePath: process.env.NODE_ENV === "production" 
+    ? undefined 
+    : "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+  headless: process.env.NODE_ENV === "production" ? "new" : false,
   args: [
     "--no-sandbox",
     "--disable-setuid-sandbox",
     "--disable-dev-shm-usage",
     "--disable-gpu",
+    "--disable-software-rasterizer",
+    "--disable-dev-tools",
     ...(process.env.NODE_ENV === "production" ? [] : ["--start-maximized"])
   ],
   defaultViewport: process.env.NODE_ENV === "production" ? { width: 1920, height: 1080 } : null,
