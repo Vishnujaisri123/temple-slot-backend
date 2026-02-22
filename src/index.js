@@ -56,8 +56,8 @@ app.listen(PORT, () => {
   // 🔥 Run once immediately
   checkSlots();
 
-  // 🔁 Auto-check every 2 hours
-  cron.schedule("0 */2 * * *", async () => {
+  // 🔁 Auto-check every 1 minute
+  cron.schedule("* * * * *", async () => {
     console.log("⏳ Running scheduled slot check...");
     try {
       await checkSlots();

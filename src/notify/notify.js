@@ -71,6 +71,9 @@ async function notify(message) {
       sound: "default",
       title: "🛕 Temple Alert",
       body: message,
+      priority: "high",
+      channelId: "temple-alerts",
+      _displayInForeground: true,
     });
 
     console.log("✅ Push sent!");
